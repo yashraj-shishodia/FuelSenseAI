@@ -2,8 +2,11 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <title>FuelSense AI</title>
+
 </head>
 
 <body>
@@ -12,7 +15,15 @@
 
     <h3>Smart CNG & EV Station Recommendation System</h3>
 
-    <p>Welcome to FuelSense AI.</p>
+    <button onclick="getLocation()">
+
+        Allow Location
+
+    </button>
+
+    <h2 id="result"></h2>
+
+    <script src="{{ url_for('static', filename='js/location.js') }}"></script>
 
 </body>
 
