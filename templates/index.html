@@ -7,9 +7,19 @@
 
     <title>FuelSense AI</title>
 
+    <!-- Leaflet CSS -->
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
+
+<div class="container">
 
     <h1>FuelSense AI</h1>
 
@@ -17,13 +27,19 @@
 
     <button onclick="getLocation()">
 
-        Allow Location
+        Allow My Location
 
     </button>
 
     <h2 id="result"></h2>
 
-    <script src="{{ url_for('static', filename='js/location.js') }}"></script>
+    <div id="map"></div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
 
 </body>
 
