@@ -5,41 +5,80 @@
 
     <meta charset="UTF-8">
 
-    <title>FuelSense AI</title>
-
-    <!-- Leaflet CSS -->
+    <title>FuelPilot AI</title>
 
     <link rel="stylesheet"
-          href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+        href="https://unpkg.com/leaflet/dist/leaflet.css">
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+        href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>FuelSense AI</h1>
+        <h1>FuelPilot AI</h1>
 
-    <h3>Smart CNG & EV Station Recommendation System</h3>
+        <h3>
+            Intelligent Fuel & EV Recommendation System
+        </h3>
 
-    <button onclick="getLocation()">
+        <div class="search-container">
 
-        Allow My Location
+    <input
+        type="text"
+        id="locationInput"
+        placeholder="Enter City or Landmark">
 
+    <button onclick="searchLocation()">
+        Search
     </button>
 
-    <h2 id="result"></h2>
-
-    <div id="map"></div>
+    <button onclick="getCurrentLocation()">
+        📍 My Location
+    </button>
 
 </div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<div class="prediction-container">
 
-<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+    <label>
+        Prediction Date (Optional)
+    </label>
+
+    <input
+        type="date"
+        id="predictionDate">
+
+    <label>
+        Prediction Time (Optional)
+    </label>
+
+    <input
+        type="time"
+        id="predictionTime">
+
+</div>
+
+        <h3 id="result"></h3>
+
+        <div id="map"></div>
+
+        <h2>Nearby Stations</h2>
+
+        <div id="stationList"></div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script src="{{ url_for('static', filename='js/location.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/stations.js') }}"></script>
 
 </body>
 
