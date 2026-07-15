@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 import joblib
 import pandas as pd
@@ -9,18 +10,21 @@ from database.db import save_prediction
 # Load ML Model
 # -----------------------------
 
-model = joblib.load("models/crowd_model.pkl")
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+
+model = joblib.load(os.path.join(MODEL_DIR, "crowd_model.pkl"))
 
 weather_encoder = joblib.load(
-    "models/weather_encoder.pkl"
+    os.path.join(MODEL_DIR, "weather_encoder.pkl")
 )
 
 brand_encoder = joblib.load(
-    "models/brand_encoder.pkl"
+    os.path.join(MODEL_DIR, "brand_encoder.pkl")
 )
 
 poi_encoder = joblib.load(
-    "models/poi_encoder.pkl"
+    os.path.join(MODEL_DIR, "poi_encoder.pkl")
 )
 
 
