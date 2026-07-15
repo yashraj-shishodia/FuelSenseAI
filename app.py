@@ -2,6 +2,8 @@ from flask import Flask
 
 from database.db import initialize_database
 
+from api.geocoding import search_place
+
 from database.feedback import initialize_feedback_database
 
 initialize_feedback_database()
