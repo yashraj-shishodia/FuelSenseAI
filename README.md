@@ -58,7 +58,28 @@ Then open `http://127.0.0.1:5001`.
 
 ## Deployment
 
-This project includes a `Dockerfile` and `Procfile` for deployment. Use your cloud provider of choice and set `GEOAPIFY_API_KEY` as an environment variable.
+### Vercel
+
+This project can be deployed to Vercel using the included `Dockerfile` and `vercel.json` configuration. Create a new Vercel project from this repository, then set the environment variable:
+
+```bash
+GEOAPIFY_API_KEY=your_real_key_here
+```
+
+The Dockerfile uses the `PORT` environment variable so Vercel can route traffic correctly.
+
+### Other providers
+
+This project also supports Docker-based deployment and Heroku-style deployment.
+
+- For Docker:
+
+```bash
+docker build -t fuelsenseai .
+docker run -p 5001:5000 -e GEOAPIFY_API_KEY=your_real_key_here fuelsenseai
+```
+
+- For cloud providers with `Procfile`, use the existing `Procfile`.
 
 ## Project Structure
 
