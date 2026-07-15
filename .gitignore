@@ -2,5 +2,5 @@ venv/
 __pycache__/
 .env
 *.pyc
-database/
+database/*.db
 models/crowd_model.pkl
