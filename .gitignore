@@ -3,4 +3,4 @@ __pycache__/
 .env
 *.pyc
 database/*.db
-models/crowd_model.pkl
+
