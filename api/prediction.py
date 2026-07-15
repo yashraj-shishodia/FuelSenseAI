@@ -1,4 +1,6 @@
 import os
+import subprocess
+import sys
 from datetime import datetime
 import joblib
 import pandas as pd
@@ -12,6 +14,24 @@ from database.db import save_prediction
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
+TRAIN_SCRIPT = os.path.join(BASE_DIR, "ml", "train_model.py")
+
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+required_models = [
+    "crowd_model.pkl",
+    "weather_encoder.pkl",
+    "brand_encoder.pkl",
+    "poi_encoder.pkl"
+]
+
+missing_models = [
+    model_name for model_name in required_models
+    if not os.path.exists(os.path.join(MODEL_DIR, model_name))
+]
+
+if missing_models:
+    subprocess.check_call([sys.executable, TRAIN_SCRIPT])
 
 model = joblib.load(os.path.join(MODEL_DIR, "crowd_model.pkl"))
 
