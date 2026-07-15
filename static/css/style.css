@@ -1,123 +1,159 @@
-/* ------------------------------
-   GENERAL
---------------------------------*/
+/* ========================= */
+/* GENERAL */
+/* ========================= */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:"Segoe UI",sans-serif;
 }
 
 body{
 
-    background:#eef3f8;
+    background:#F4F6F9;
+
+    height:100vh;
+
+    overflow:hidden;
 
 }
 
-.container{
 
-    width:95%;
+/* ========================= */
+/* DASHBOARD */
+/* ========================= */
 
-    max-width:1400px;
+.dashboard{
 
-    margin:auto;
+    display:grid;
+
+    grid-template-columns:20% 60% 20%;
+
+    height:100vh;
+
+}
+
+
+/* ========================= */
+/* LEFT PANEL */
+/* ========================= */
+
+.left-panel{
+
+    background:white;
 
     padding:25px;
 
-}
+    border-right:1px solid #e5e7eb;
 
-/* ------------------------------
-   HEADINGS
---------------------------------*/
-
-h1{
-
-    color:#0d47a1;
-
-    text-align:center;
-
-    margin-bottom:10px;
+    overflow-y:auto;
 
 }
 
-h2{
 
-    margin-top:30px;
+/* ========================= */
+/* RIGHT PANEL */
+/* ========================= */
 
-    margin-bottom:15px;
+.right-panel{
 
-    color:#0d47a1;
+    background:white;
 
-}
+    padding:20px;
 
-h3{
+    border-left:1px solid #e5e7eb;
 
-    text-align:center;
-
-    color:#555;
-
-    margin-bottom:20px;
+    overflow-y:auto;
 
 }
 
-/* ------------------------------
-   SEARCH BAR
---------------------------------*/
 
-.search-container{
+/* ========================= */
+/* MAP */
+/* ========================= */
+
+.map-panel{
+
+    background:#ddd;
+
+    position:relative;
+
+}
+
+#map{
+
+    width:100%;
+
+    height:100vh;
+
+}
+
+
+/* ========================= */
+/* LOGO */
+/* ========================= */
+
+.logo-section{
+
+    margin-bottom:30px;
+
+}
+
+.logo-section h1{
+
+    color:#2563EB;
+
+    margin-bottom:6px;
+
+}
+
+.logo-section p{
+
+    color:#6b7280;
+
+    font-size:14px;
+
+}
+
+
+/* ========================= */
+/* SEARCH */
+/* ========================= */
+
+.search-card{
 
     display:flex;
 
-    justify-content:center;
-
-    align-items:center;
+    flex-direction:column;
 
     gap:12px;
 
-    margin-bottom:25px;
-
-    flex-wrap:wrap;
-
 }
 
-.search-container input{
+.search-card input{
 
-    width:380px;
-
-    padding:14px;
+    padding:12px;
 
     border-radius:10px;
 
-    border:1px solid #d0d0d0;
+    border:1px solid #d1d5db;
 
-    font-size:16px;
-
-    outline:none;
+    font-size:15px;
 
 }
 
-.search-container input:focus{
+.search-card button{
 
-    border:2px solid #1976d2;
-
-}
-
-/* ------------------------------
-   BUTTONS
---------------------------------*/
-
-button{
-
-    background:#1976d2;
-
-    color:white;
+    padding:12px;
 
     border:none;
 
-    padding:13px 22px;
-
     border-radius:10px;
+
+    background:#2563EB;
+
+    color:white;
 
     cursor:pointer;
 
@@ -127,59 +163,50 @@ button{
 
 }
 
-button:hover{
+.search-card button:hover{
 
-    background:#0d47a1;
-
-    transform:translateY(-2px);
+    background:#1d4ed8;
 
 }
 
-/* ------------------------------
-   MAP
---------------------------------*/
 
-#map{
+/* ========================= */
+/* LABEL */
+/* ========================= */
 
-    height:600px;
+label{
 
-    border-radius:15px;
+    margin-top:5px;
 
-    overflow:hidden;
+    font-weight:600;
 
-    box-shadow:0px 5px 15px rgba(0,0,0,.15);
-
-}
-
-/* ------------------------------
-   RESULT TEXT
---------------------------------*/
-
-#result{
-
-    margin:20px;
-
-    color:#444;
-
-    font-weight:bold;
+    color:#374151;
 
 }
 
-/* ------------------------------
-   STATION LIST
---------------------------------*/
 
-#stationList{
+/* ========================= */
+/* RECOMMENDED */
+/* ========================= */
 
-    width:100%;
+.recommended-section{
 
-    margin-top:30px;
+    margin-top:35px;
 
 }
 
-/* ------------------------------
-   CARD
---------------------------------*/
+.recommended-section h2{
+
+    margin-bottom:15px;
+
+    color:#111827;
+
+}
+
+
+/* ========================= */
+/* STATION CARD */
+/* ========================= */
 
 .station-card{
 
@@ -191,223 +218,7 @@ button:hover{
 
     margin-bottom:18px;
 
-    box-shadow:0px 4px 12px rgba(0,0,0,.12);
-
-    transition:.25s;
-
-}
-
-.station-card:hover{
-
-    transform:translateY(-3px);
-
-}
-
-.station-card h2{
-
-    color:#1565c0;
-
-    margin-bottom:12px;
-
-}
-
-.station-card p{
-
-    margin:8px 0;
-
-    color:#555;
-
-    line-height:24px;
-
-}
-
-/* ------------------------------
-   RECOMMENDED CARD
---------------------------------*/
-
-.recommended{
-
-    border-left:8px solid #00c853;
-
-    background:#f4fff4;
-
-}
-
-/* ------------------------------
-   SCORE BADGES
---------------------------------*/
-
-.score{
-
-    display:inline-block;
-
-    padding:6px 12px;
-
-    border-radius:20px;
-
-    color:white;
-
-    font-weight:bold;
-
-    margin-top:10px;
-
-}
-
-.score-high{
-
-    background:#2e7d32;
-
-}
-
-.score-medium{
-
-    background:#ff9800;
-
-}
-
-.score-low{
-
-    background:#d32f2f;
-
-}
-
-/* ------------------------------
-   REASON BOX
---------------------------------*/
-
-.reason{
-
-    background:#f8f8f8;
-
-    padding:12px;
-
-    border-radius:10px;
-
-    margin-top:12px;
-
-    color:#444;
-
-}
-
-/* ------------------------------
-   NAVIGATE BUTTON
---------------------------------*/
-
-.navigate-btn{
-
-    background:#00a152;
-
-    margin-top:15px;
-
-    width:100%;
-
-}
-
-.navigate-btn:hover{
-
-    background:#007d3c;
-
-}
-
-/* ------------------------------
-   MOBILE
---------------------------------*/
-
-@media(max-width:768px){
-
-.search-container{
-
-flex-direction:column;
-
-}
-
-.search-container input{
-
-width:100%;
-
-}
-
-button{
-
-width:100%;
-
-}
-
-#map{
-
-height:450px;
-
-}
-
-}
-
-.prediction-container{
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:15px;
-
-    margin:20px 0;
-
-    flex-wrap:wrap;
-
-}
-
-.prediction-container label{
-
-    font-weight:bold;
-
-    color:#333;
-
-}
-
-.prediction-container input{
-
-    padding:10px;
-
-    border-radius:8px;
-
-    border:1px solid #ccc;
-
-}
-
-.recommended{
-
-    border:3px solid #00c853;
-
-    background:#f4fff4;
-
-}
-
-.navigate-btn{
-
-    margin-top:15px;
-
-    background:#1976d2;
-
-    width:220px;
-
-}
-
-.navigate-btn:hover{
-
-    background:#0d47a1;
-
-}
-
-.recommended{
-
-    border-left:8px solid #00c853;
-
-}
-
-.station-card{
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
 
     transition:.3s;
 
@@ -415,6 +226,166 @@ height:450px;
 
 .station-card:hover{
 
-    transform:translateY(-5px);
+    transform:translateY(-4px);
+
+}
+
+.station-card h2{
+
+    color:#111827;
+
+    margin-bottom:10px;
+
+}
+
+.station-card h3{
+
+    color:#2563EB;
+
+    margin-bottom:8px;
+
+}
+
+.station-card p{
+
+    margin:6px 0;
+
+    color:#374151;
+
+}
+
+
+/* ========================= */
+/* RECOMMENDED CARD */
+/* ========================= */
+
+.recommended{
+
+    border-left:6px solid #FFD700;
+
+    background:#fffdf5;
+
+}
+
+
+/* ========================= */
+/* BUTTON */
+/* ========================= */
+
+.navigate-btn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#22C55E;
+
+    color:white;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.navigate-btn:hover{
+
+    background:#16a34a;
+
+}
+
+
+/* ========================= */
+/* RIGHT PANEL */
+/* ========================= */
+
+.right-panel h2{
+
+    margin-bottom:20px;
+
+    color:#111827;
+
+}
+
+
+/* ========================= */
+/* SCROLLBAR */
+/* ========================= */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+
+}
+
+
+/* ========================= */
+/* MOBILE */
+/* ========================= */
+
+@media(max-width:1000px){
+
+.dashboard{
+
+grid-template-columns:1fr;
+
+}
+
+.left-panel{
+
+height:auto;
+
+border-right:none;
+
+}
+
+.right-panel{
+
+height:300px;
+
+border-left:none;
+
+}
+
+#map{
+
+height:500px;
+
+}
+
+}
+.coordinates-card{
+
+    margin-top:20px;
+
+    padding:12px;
+
+    background:#f4f7ff;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#1e3a8a;
+
+    line-height:1.6;
 
 }

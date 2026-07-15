@@ -3,6 +3,7 @@ import joblib
 import pandas as pd
 
 from api.weather import get_weather
+from database.db import save_prediction
 
 # -----------------------------
 # Load ML Model
@@ -40,7 +41,6 @@ def get_poi_level(station):
     score = 0
 
     keywords = {
-
         "mall": 3,
         "market": 3,
         "metro": 3,
@@ -52,7 +52,6 @@ def get_poi_level(station):
         "airport": 4,
         "industrial": 3,
         "bus": 2
-
     }
 
     for key, value in keywords.items():
@@ -69,9 +68,7 @@ def get_poi_level(station):
 
         return "MEDIUM"
 
-    else:
-
-        return "LOW"
+    return "LOW"
 
 
 # -----------------------------
@@ -80,8 +77,7 @@ def get_poi_level(station):
 
 def predict_crowd(
     station,
-    latitude,
-    longitude,
+    weather,
     prediction_time=None
 ):
 
@@ -97,21 +93,12 @@ def predict_crowd(
 
     holiday = 1 if weekday >= 5 else 0
 
-    weather = get_weather(
-        latitude,
-        longitude
-    )["weather"]
-
     brand = station["properties"].get(
         "brand",
         "Indian Oil"
     )
 
-    poi_level = get_poi_level(
-        station
-    )
-
-    # Estimated Pump Count
+    poi_level = get_poi_level(station)
 
     brand_lower = brand.lower()
 
@@ -136,10 +123,6 @@ def predict_crowd(
         pump_count = 5
 
     service_time = 2.5
-
-    # -----------------------
-    # Encoding
-    # -----------------------
 
     try:
 
@@ -167,60 +150,27 @@ def predict_crowd(
         [poi_level]
     )[0]
 
-    # -----------------------
-    # Prediction
-    # -----------------------
-
     features = pd.DataFrame([{
 
         "hour": hour,
-
         "weekday": weekday,
-
         "month": month,
-
         "holiday": holiday,
-
         "weather": weather_encoded,
-
         "brand": brand_encoded,
-
         "poi_level": poi_encoded,
-
         "pump_count": pump_count,
-
         "service_time": service_time
 
     }])
 
-    queue = int(
+    queue = int(round(model.predict(features)[0]))
 
-        round(
-
-            model.predict(features)[0]
-
-        )
-
-    )
-
-    queue = max(
-
-        0,
-
-        min(queue, 35)
-
-    )
+    queue = max(0, min(queue, 35))
 
     waiting = round(
-
-        queue *
-
-        service_time /
-
-        pump_count,
-
+        queue * service_time / pump_count,
         1
-
     )
 
     if waiting <= 5:
@@ -240,19 +190,50 @@ def predict_crowd(
         crowd = "VERY HIGH"
 
     score = max(
-
         60,
-
         100 - int(waiting * 2)
-
     )
 
     station["queue_length"] = queue
-
     station["waiting_time"] = waiting
-
     station["predicted_crowd"] = crowd
-
     station["prediction_score"] = score
+
+    # -----------------------------
+    # Save Prediction History
+    # -----------------------------
+
+    try:
+
+        save_prediction(
+
+            station_name=station["properties"].get(
+                "name",
+                "Fuel Station"
+            ),
+
+            brand=brand,
+
+            latitude=station["geometry"]["coordinates"][1],
+
+            longitude=station["geometry"]["coordinates"][0],
+
+            prediction_time=str(prediction_time),
+
+            weather=weather,
+
+            queue_length=queue,
+
+            waiting_time=waiting,
+
+            crowd=crowd,
+
+            score=score
+
+        )
+
+    except Exception as e:
+
+        print("Database Error:", e)
 
     return station

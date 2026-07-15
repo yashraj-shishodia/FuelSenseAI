@@ -1,15 +1,21 @@
+let latestRecommendation = null;
+let markers = [];
+
 async function loadStations(latitude, longitude, predictionTime = null) {
 
     console.log("Loading Stations...");
 
     const body = {
+
         latitude: latitude,
         longitude: longitude
+
     };
 
-    // Optional Prediction Time
     if (predictionTime) {
+
         body.prediction_time = predictionTime;
+
     }
 
     const response = await fetch("/stations", {
@@ -17,7 +23,9 @@ async function loadStations(latitude, longitude, predictionTime = null) {
         method: "POST",
 
         headers: {
+
             "Content-Type": "application/json"
+
         },
 
         body: JSON.stringify(body)
@@ -36,13 +44,22 @@ async function loadStations(latitude, longitude, predictionTime = null) {
 
     stationLayer.clearLayers();
 
-    const stationList = document.getElementById("stationList");
+    markers = [];
+
+    const stationList =
+        document.getElementById("stationList");
+
+    const recommendedStation =
+        document.getElementById("recommendedStation");
 
     stationList.innerHTML = "";
+
+    recommendedStation.innerHTML = "";
 
     data.features.forEach((station, index) => {
 
         const lat = station.geometry.coordinates[1];
+
         const lon = station.geometry.coordinates[0];
 
         const props = station.properties;
@@ -73,12 +90,7 @@ async function loadStations(latitude, longitude, predictionTime = null) {
         else if (crowd === "VERY HIGH")
             crowdColor = "red";
 
-
-        // -----------------------------
-        // Marker
-        // -----------------------------
-
-        L.marker([lat, lon])
+                const marker = L.marker([lat, lon])
 
             .addTo(stationLayer)
 
@@ -89,17 +101,19 @@ async function loadStations(latitude, longitude, predictionTime = null) {
                 Brand : ${brand}<br>
 
                 Crowd :
+
                 <span style="color:${crowdColor};font-weight:bold;">
+
                 ${crowd}
+
                 </span><br>
 
-                Waiting :
-                ${waiting} min<br>
+                Waiting : ${waiting} min<br>
 
-                Distance :
-                ${distance.toFixed(2)} km<br><br>
+                Distance : ${distance.toFixed(2)} km<br><br>
 
                 <a target="_blank"
+
                 href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}">
 
                 Navigate
@@ -108,18 +122,35 @@ async function loadStations(latitude, longitude, predictionTime = null) {
 
             `);
 
-
-        // -----------------------------
-        // Recommendation
-        // -----------------------------
+        markers.push(marker);
 
         if (index === 0) {
 
-            stationList.innerHTML += `
+            latestRecommendation = {
+
+    station_name: name,
+
+    brand: brand,
+
+    latitude: lat,
+
+    longitude: lon,
+
+    prediction_time: predictionTime
+        ? predictionTime
+        : new Date().toISOString(),
+
+    weather: "Unknown",
+
+    predicted_waiting: waiting
+
+};
+
+            recommendedStation.innerHTML = `
 
             <div class="station-card recommended">
 
-                <h2>⭐ Recommended Station</h2>
+                
 
                 <h3>${name}</h3>
 
@@ -127,107 +158,115 @@ async function loadStations(latitude, longitude, predictionTime = null) {
 
                 <p>${address}</p>
 
-                <p><b>Distance :</b> ${distance.toFixed(2)} km</p>
-
                 <p>
 
-                <b>Predicted Crowd :</b>
+                    <b>Distance :</b>
 
-                <span style="color:${crowdColor};font-weight:bold;">
-
-                ${crowd}
-
-                </span>
+                    ${distance.toFixed(2)} km
 
                 </p>
 
                 <p>
 
-                <b>Estimated Waiting :</b>
+    <b>Predicted Crowd :</b>
 
-                ${waiting} minutes
+    <span style="color:${crowdColor};font-weight:bold;">
 
-                </p>
+        ${crowd}
 
-                <p><b>Prediction Time :</b>
-${predictionTime ? predictionTime.replace("T"," ") : "Current Time"}
+    </span>
+
 </p>
 
                 <p>
 
-                <b>Prediction Score :</b>
+                    <b>Estimated Waiting :</b>
 
-                ${score}
+                    ${waiting} min
 
                 </p>
 
                 <p>
 
-<b>Reason :</b>
+                    <b>Recommendation Score :</b>
 
-Lowest waiting time and nearest recommended station.
+                    ${score}/100
 
-</p>
+                </p>
+
+                <p>
+
+                    <b>Why Recommended?</b><br>
+
+                    ✔ Lowest predicted waiting time<br>
+
+                    ✔ Close to your location<br>
+
+                    ✔ Best overall recommendation
+
+                </p>
 
                 <button
-                class="navigate-btn"
-                onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}','_blank')">
+                    class="navigate-btn"
+                    onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}','_blank')">
 
-                🧭 Open in Google Maps
+                    🧭 Open in Google Maps
 
                 </button>
 
             </div>
 
             `;
+
+            setTimeout(showFeedbackPopup, 120000);
+
+            return;
+
         }
-
-
-        // -----------------------------
-        // Other Stations
-        // -----------------------------
 
         stationList.innerHTML += `
 
-        <div class="station-card">
+        <div class="station-card"
 
-            <h2>${index + 1}. ${name}</h2>
+            onclick="focusStation(${index})">
+
+            <h3>${name}</h3>
 
             <p><b>Brand :</b> ${brand}</p>
 
-            <p>${address}</p>
-
-            <p><b>Distance :</b> ${distance.toFixed(2)} km</p>
-
             <p>
 
-            <b>Crowd :</b>
+                <b>Crowd :</b>
 
-            <span style="color:${crowdColor};font-weight:bold;">
+                <span style="color:${crowdColor};font-weight:bold;">
 
-            ${crowd}
+                    ${crowd}
 
-            </span>
+                </span>
 
             </p>
 
             <p>
 
-            <b>Waiting :</b>
+                <b>Waiting :</b>
 
-            ${waiting} min
+                ${waiting} min
 
             </p>
 
-            <p><b>Prediction Time :</b>
-${predictionTime ? predictionTime.replace("T"," ") : "Current Time"}
-</p>
+            <p>
+
+                <b>Distance :</b>
+
+                ${distance.toFixed(2)} km
+
+            </p>
 
             <button
-            class="navigate-btn"
-            onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}','_blank')">
+                class="navigate-btn"
+                onclick="event.stopPropagation();window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}','_blank')">
 
-            Navigate
+                Navigate
 
             </button>
 
@@ -236,5 +275,133 @@ ${predictionTime ? predictionTime.replace("T"," ") : "Current Time"}
         `;
 
     });
+
+}
+
+function focusStation(index) {
+
+    if (!markers[index])
+        return;
+
+    const marker = markers[index];
+
+    map.setView(marker.getLatLng(), 16, {
+
+        animate: true,
+        duration: 1
+
+    });
+
+    marker.openPopup();
+
+}
+
+
+async function submitFeedback(rating) {
+
+    if (!latestRecommendation)
+        return;
+
+    let actualWaiting = latestRecommendation.predicted_waiting;
+
+    if (rating === 2) {
+
+        const value = document.getElementById("actualWaiting").value;
+
+        if (!value) {
+
+            alert("Please enter the actual waiting time.");
+
+            return;
+
+        }
+
+        actualWaiting = Number(value);
+
+    }
+
+    try {
+
+        const response = await fetch("/feedback", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                station_name: latestRecommendation.station_name,
+
+                brand: latestRecommendation.brand,
+
+                latitude: latestRecommendation.latitude,
+
+                longitude: latestRecommendation.longitude,
+
+                prediction_time: latestRecommendation.prediction_time,
+
+                weather: latestRecommendation.weather,
+
+                predicted_waiting: latestRecommendation.predicted_waiting,
+
+                actual_waiting: actualWaiting,
+
+                rating: rating
+
+            })
+
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            document.getElementById("feedbackModal").style.display = "none";
+
+            alert("Thank you! Your feedback has been saved.");
+
+        } else {
+
+            alert("Unable to save feedback.");
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Server Error");
+
+    }
+
+}
+
+
+function showFeedbackPopup() {
+
+    const modal = document.getElementById("feedbackModal");
+
+    if (modal) {
+
+        modal.style.display = "flex";
+
+    }
+
+}
+
+
+function showActualWaitingInput() {
+
+    const container = document.getElementById("actualWaitingContainer");
+
+    if (container) {
+
+        container.style.display = "block";
+
+    }
 
 }

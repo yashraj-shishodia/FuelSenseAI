@@ -1,10 +1,15 @@
 import os
 import requests
 
-API_KEY = os.getenv("GEOAPIFY_API_KEY")
-
-
 def search_place(location):
+
+    API_KEY = os.getenv("GEOAPIFY_API_KEY", "").strip()
+
+    if not API_KEY:
+        return {
+            "results": [],
+            "error": "Missing Geoapify API key"
+        }
 
     url = (
         "https://api.geoapify.com/v1/geocode/search"
@@ -17,10 +22,18 @@ def search_place(location):
 
     if response.status_code != 200:
 
-        print("Geocoding Error:", response.text)
+        error_message = None
+        try:
+            error_message = response.json().get("message")
+        except Exception:
+            pass
+
+        error_message = error_message or response.text
+        print("Geocoding Error:", error_message)
 
         return {
-            "results": []
+            "results": [],
+            "error": error_message
         }
 
     data = response.json()

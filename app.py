@@ -1,12 +1,23 @@
-from flask import Flask, render_template, request, jsonify
+import os
 from dotenv import load_dotenv
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
+
+from flask import Flask, render_template, request, jsonify
 
 from api.geocoding import search_place
 from api.places import nearbyStations
 
-load_dotenv()
+from database.db import initialize_database
+from database.feedback import (
+    initialize_feedback_database,
+    save_feedback
+)
 
 app = Flask(__name__)
+PORT = int(os.environ.get("PORT", 5000))
+
+initialize_database()
+initialize_feedback_database()
 
 
 # -----------------------------------
@@ -58,7 +69,7 @@ def search():
 
 
 # -----------------------------------
-# Crowd Prediction
+# Station Prediction
 # -----------------------------------
 
 @app.route("/stations", methods=["POST"])
@@ -67,7 +78,6 @@ def stations():
     data = request.get_json()
 
     latitude = data["latitude"]
-
     longitude = data["longitude"]
 
     prediction_time = data.get("prediction_time")
@@ -86,6 +96,65 @@ def stations():
 
 
 # -----------------------------------
+# Save User Feedback
+# -----------------------------------
+
+@app.route("/feedback", methods=["POST"])
+def feedback():
+
+    try:
+
+        data = request.get_json()
+
+        save_feedback(
+
+            station_name=data["station_name"],
+
+            brand=data["brand"],
+
+            latitude=data["latitude"],
+
+            longitude=data["longitude"],
+
+            prediction_time=data["prediction_time"],
+
+            weather=data["weather"],
+
+            queue_length=data["queue_length"],
+
+            predicted_waiting=data["predicted_waiting"],
+
+            actual_waiting=data["actual_waiting"],
+
+            rating=data["rating"]
+
+        )
+
+        return jsonify({
+
+            "success": True
+
+        })
+
+    except Exception as e:
+
+        print(e)
+
+        return jsonify({
+
+            "success": False,
+
+            "error": str(e)
+
+        }), 500
+
+
+# -----------------------------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+
+    app.run(
+        host="0.0.0.0",
+        port=PORT,
+        debug=(os.environ.get("FLASK_DEBUG", "false").lower() == "true")
+    )

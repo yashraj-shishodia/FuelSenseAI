@@ -7,6 +7,8 @@
 
     <title>FuelPilot AI</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet"
         href="https://unpkg.com/leaflet/dist/leaflet.css">
 
@@ -17,68 +19,121 @@
 
 <body>
 
-    <div class="container">
+<div class="dashboard">
 
-        <h1>FuelPilot AI</h1>
+    <!-- ========================= -->
+    <!-- LEFT PANEL (20%) -->
+    <!-- ========================= -->
 
-        <h3>
-            Intelligent Fuel & EV Recommendation System
-        </h3>
+    <aside class="left-panel">
 
-        <div class="search-container">
+        <div class="logo-section">
 
-    <input
-        type="text"
-        id="locationInput"
-        placeholder="Enter City or Landmark">
+            <h1>⛽ FuelPilot AI</h1>
 
-    <button onclick="searchLocation()">
-        Search
-    </button>
+            <p>AI Powered Fuel Station Recommendation</p>
 
-    <button onclick="getCurrentLocation()">
-        📍 My Location
-    </button>
+        </div>
 
+        <div class="search-card">
+
+            <input
+                type="text"
+                id="locationInput"
+                placeholder="Search City or Landmark">
+
+            <button onclick="searchLocation()">
+                🔍 Search
+            </button>
+
+            <button onclick="getCurrentLocation()">
+                📍 My Location
+            </button>
+
+            <label>
+                Prediction Date
+            </label>
+
+            <input
+                type="date"
+                id="predictionDate">
+
+            <label>
+                Prediction Time
+            </label>
+
+            <input
+                type="time"
+                id="predictionTime">
+
+            <div id="result" class="coordinates-card">
+    Latitude : --
+    <br>
+    Longitude : --
 </div>
 
-<div class="prediction-container">
+        </div>
 
-    <label>
-        Prediction Date (Optional)
-    </label>
+        <div class="recommended-section">
 
-    <input
-        type="date"
-        id="predictionDate">
+            <h2>
+                ⭐ Recommended Station
+            </h2>
 
-    <label>
-        Prediction Time (Optional)
-    </label>
+            <!-- Recommended station will be inserted here -->
 
-    <input
-        type="time"
-        id="predictionTime">
+            <div id="recommendedStation">
 
-</div>
+                <p style="color:gray;">
+                    Search a location to view recommendation
+                </p>
 
-        <h3 id="result"></h3>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAP (60%) -->
+    <!-- ========================= -->
+
+    <main class="map-panel">
 
         <div id="map"></div>
 
+    </main>
+
+
+    <!-- ========================= -->
+    <!-- RIGHT PANEL (20%) -->
+    <!-- ========================= -->
+
+    <aside class="right-panel">
+
         <h2>Nearby Stations</h2>
 
-        <div id="stationList"></div>
+        <div id="stationList">
 
-    </div>
+            <p style="color:gray;">
+                Nearby stations will appear here.
+            </p>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        </div>
 
-    <script src="{{ url_for('static', filename='js/location.js') }}"></script>
+    </aside>
 
-    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+</div>
 
-    <script src="{{ url_for('static', filename='js/stations.js') }}"></script>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/stations.js') }}"></script>
 
 </body>
 

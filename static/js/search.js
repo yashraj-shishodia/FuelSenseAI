@@ -26,6 +26,11 @@ async function searchLocation() {
 
     const data = await response.json();
 
+    if (data.error) {
+        alert(data.error);
+        return;
+    }
+
     if (!data.results || data.results.length === 0) {
 
         alert("Location not found");

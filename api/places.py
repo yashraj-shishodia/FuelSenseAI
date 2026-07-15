@@ -6,9 +6,6 @@ from datetime import datetime
 from api.prediction import predict_crowd
 from api.weather import get_weather
 
-API_KEY = os.getenv("GEOAPIFY_API_KEY")
-
-
 # ---------------------------------------
 # Distance Calculation
 # ---------------------------------------
@@ -42,6 +39,8 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 def nearbyStations(latitude,
                    longitude,
                    prediction_time=None):
+
+    API_KEY = os.getenv("GEOAPIFY_API_KEY")
 
     url = (
         "https://api.geoapify.com/v2/places"
