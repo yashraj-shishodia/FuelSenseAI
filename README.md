@@ -8,14 +8,14 @@ FuelSenseAI is a Flask-based web application that recommends nearby fuel station
 - Discover nearby fuel stations using Geoapify places API
 - Predict waiting times and station crowd based on weather and historical patterns
 - Save user feedback for predicted and actual wait times
-- Deploy locally with Docker or on cloud platforms using `Procfile`
+- Run locally with Python or deploy on cloud platforms using `Procfile`
 
 ## Requirements
 
 - Python 3.11+ (or 3.12+ recommended)
 - `pip` package manager
 - A valid Geoapify API key
-- Docker (optional)
+- `pip` package manager
 
 ## Setup
 
@@ -42,21 +42,31 @@ python3 app.py
 
 The application will run at `http://127.0.0.1:5000`.
 
-## Docker
-
-Build the Docker image:
-```bash
-docker build -t fuelsenseai .
-```
-
-Run the container with your Geoapify key:
-```bash
-docker run -p 5001:5000 -e GEOAPIFY_API_KEY=your_real_key_here fuelsenseai
-```
-
-Then open `http://127.0.0.1:5001`.
-
 ## Deployment
+
+This project supports local Python execution and cloud deployment using `Procfile`.
+
+Set `GEOAPIFY_API_KEY` in your cloud provider's environment variables.
+
+### Vercel
+
+To deploy on Vercel without Docker, use a serverless or custom deployment configuration and set the environment variable:
+
+```bash
+GEOAPIFY_API_KEY=your_real_key_here
+```
+
+### Other providers
+
+Use the existing `Procfile` or your preferred Python deployment workflow.
+
+- Run locally:
+
+```bash
+python3 app.py
+```
+
+## Project Structure
 
 ### Vercel
 
