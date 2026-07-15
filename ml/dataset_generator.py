@@ -26,7 +26,7 @@ poi_levels = [
     "HIGH"
 ]
 
-for _ in range(500000):
+for _ in range(30000):
 
     hour = random.randint(0,23)
 
