@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: FuelSenseAI
+    env: python
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    autoDeploy: true
+    healthCheckPath: /
+    preDeployCommand: python3 ml/train_model.py
