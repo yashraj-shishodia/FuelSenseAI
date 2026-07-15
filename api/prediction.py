@@ -30,8 +30,6 @@ missing_models = [
     if not os.path.exists(os.path.join(MODEL_DIR, model_name))
 ]
 
-if missing_models:
-    subprocess.check_call([sys.executable, TRAIN_SCRIPT])
 
 model = joblib.load(os.path.join(MODEL_DIR, "crowd_model.pkl"))
 
